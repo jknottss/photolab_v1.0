@@ -37,7 +37,7 @@ S21Matrix::S21Matrix(const int rows, const int columns, std::vector<float> image
 
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < columns; j++)
-            matrix[i][j] = image[j%columns];
+            matrix[i][j] = image[j+i*columns];
 }
 
 S21Matrix::S21Matrix(const S21Matrix &rhs)
@@ -80,17 +80,57 @@ S21Matrix::~S21Matrix()
 
 float S21Matrix::getElement(int row, int column)
 {
+	if (matrix == nullptr)
+		throw std::out_of_range("nil ptr");
     return matrix[row][column];
+}
+
+void S21Matrix::setElement(int row, int column, float value)
+{
+	if (matrix == nullptr)
+		throw std::out_of_range("nil ptr");
+	matrix[row][column] = value;
+}
+
+int S21Matrix::getRows()
+{
+	return rows_cnt;
+}
+
+int S21Matrix::getColumns()
+{
+	return columns_cnt;
 }
 
 void S21Matrix::print()
 {
-    std::cout << "[ ";
     for (int i = 0; i < rows_cnt; i++) {
         for (int j = 0; j < columns_cnt; j++) {
             std::cout << matrix[i][j] << " ";
         }
         std::cout << "\n";
     }
-    std::cout << " ]";
+}
+
+float sum(S21Matrix a)
+{
+	float res = 0;
+	for (int i = 0; i < a.getRows(); i++)
+		for (int j = 0; j < a.getColumns(); j++)
+			res += a.getElement(i , j);
+	return res;
+}
+
+S21Matrix scalarProduct(S21Matrix a, S21Matrix b)
+{
+	if (a.getRows() != b.getRows() || a.getColumns() != b.getColumns())
+		throw std::out_of_range("not equals matrix");
+	S21Matrix res = S21Matrix(a.getRows(), a.getColumns());
+	float value = 0;
+	for (int i = 0; i < res.getRows(); i++)
+		for (int j = 0; j < res.getColumns(); j++) {
+			value = a.getElement(i, j) * b.getElement(i,j);
+			res.setElement(i, j, value);
+		}
+	return res;
 }

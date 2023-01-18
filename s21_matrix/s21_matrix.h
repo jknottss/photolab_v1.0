@@ -12,14 +12,17 @@ public:
     ~S21Matrix();
     S21Matrix &operator=(S21Matrix const &rhs);
     float getElement(int row, int column);
+	void setElement(int row, int column, float value);
     void print();
+	int getRows();
+	int getColumns();
 private:
     int rows_cnt;
     int columns_cnt;
     float **matrix;
 };
 
-S21Matrix scalarProduct(S21Matrix const a, S21Matrix const b);
-float sum(S21Matrix const a, S21Matrix const b);
+S21Matrix scalarProduct(S21Matrix a, S21Matrix b);
+float sum(S21Matrix a);
 
 #endif
